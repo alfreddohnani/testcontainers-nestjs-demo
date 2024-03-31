@@ -10,6 +10,11 @@ import { EnvValidationSchema } from './common/env-validation.schema';
 import { z } from 'zod';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/exceptions-filter';
+import { CategoryModule } from './category/category.module';
+import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
+import { ProductModule } from './product/product.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -38,6 +43,11 @@ import { AllExceptionsFilter } from './common/exceptions-filter';
       },
     }),
     AuthModule,
+    CategoryModule,
+    OrderModule,
+    PaymentModule,
+    ProductModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

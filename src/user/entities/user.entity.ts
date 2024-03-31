@@ -1,5 +1,7 @@
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -7,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { hashPassword } from '~/common/utils';
 import { Order } from '~/order/entities/order.entity';
 import { Payment } from '~/payment/entities/payment.entity';
 
@@ -52,4 +55,12 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassword() {
+    if (this.password) {
+      this.password = hashPassword({ plainPassword: this.password });
+    }
+  }
 }

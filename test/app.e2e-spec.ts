@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -8,7 +8,9 @@ import {
   StartedPostgreSqlContainer,
 } from '@testcontainers/postgresql';
 
-describe('AppController (e2e)', () => {
+describe('(e2e) Tests', () => {
+  jest.setTimeout(1000 * 60 * 1);
+
   let app: INestApplication;
   let postgreSqlContainer: StartedPostgreSqlContainer;
   let server: request.SuperTest<request.Test>;
@@ -19,8 +21,7 @@ describe('AppController (e2e)', () => {
       .withDatabase('testcontainer_demo')
       .start();
 
-    //update database enviroment variables in order for typeorm to connect to the testcontainer DB
-
+    //update database environment variables in order for typeorm to connect to the testcontainer DB
     process.env.DB_HOST = postgreSqlContainer.getHost();
     process.env.DB_PORT = postgreSqlContainer.getPort().toString();
     process.env.DB_USERNAME = postgreSqlContainer.getUsername();
@@ -44,4 +45,10 @@ describe('AppController (e2e)', () => {
   it('/ (GET)', () => {
     return server.get('/').expect(200).expect('Hello World!');
   });
+
+  it('registers a new user', async () => {
+    const res = await server.post('/users').send();
+    expect(res.status).toBe(HttpStatus.CREATED);
+  });
+  describe('Users', () => {});
 });
