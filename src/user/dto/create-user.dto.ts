@@ -6,7 +6,8 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { UserTitle } from '../entities/user.entity';
+import { User, UserTitle } from '../entities/user.entity';
+import { BaseResponseDto } from '~/common/utils/dto/base-response.dto';
 
 export class CreateUserRequestDto {
   @IsString()
@@ -31,4 +32,8 @@ export class CreateUserRequestDto {
   @IsString()
   @MinLength(8)
   password: string;
+}
+
+export class CreateUserResponseDto extends BaseResponseDto {
+  user: User;
 }

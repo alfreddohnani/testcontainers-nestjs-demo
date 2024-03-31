@@ -1,15 +1,13 @@
 import {
   BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { hashPassword } from '~/common/utils';
 import { Order } from '~/order/entities/order.entity';
 import { Payment } from '~/payment/entities/payment.entity';
 
@@ -19,12 +17,13 @@ export enum UserTitle {
 }
 
 @Entity({ name: 'users' })
+@Unique(['telephone'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar' })
-  firsName: string;
+  firstName: string;
 
   @Column({ type: 'varchar' })
   lastName: string;
@@ -55,12 +54,4 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: string;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  hashPassword() {
-    if (this.password) {
-      this.password = hashPassword({ plainPassword: this.password });
-    }
-  }
 }
